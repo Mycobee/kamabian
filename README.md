@@ -47,7 +47,7 @@ Open an issue before contributing, and have a brief discussion with the author a
 #### Future features
 
 - Adding multiple servers to the init process
-- Database connection options
+- Database administration options (postgres, mysql, sqlite)
 - Email configuration for logwatch
 - Docker compose setup
 - User mgmt and access controls
