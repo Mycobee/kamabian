@@ -15,6 +15,10 @@ This repository handles the following.
 
 Ansible works by connecting to a remote system, and configuring it. An easy way to use this script is by installing ansible on your local machine, and pointing it at a cloud VM with a strong password. Other clever, automated solutions are possible, such as using github actions runners and/or terraform to trigger this script.
 
+## Depedencies
+
+You must have bash, python3 and ansible core installed on your system. This repo is tested with GNU bash version 5.2.32, Python 3.11.5 and Ansible core 2.17.4. This may work with older versions, but it is neither tested nor verified.
+
 ## Scripts
 
 ### init
