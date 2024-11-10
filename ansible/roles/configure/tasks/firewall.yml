@@ -1,26 +1,26 @@
 ---
 - name: Install UFW
-  apt:
+  ansible.builtin.apt:
     name: ufw
     state: present
     update_cache: true
 
 - name: Set default policy for incoming traffic
-  ufw:
+  community.general.ufw:
     default: deny
     direction: incoming
     state: enabled
-    logging: on
+    logging: true
 
 - name: Set default policy for outgoing traffic
-  ufw:
+  community.general.ufw:
     default: deny
     direction: outgoing
     state: enabled
-    logging: on
+    logging: true
 
 - name: Allow inbound traffic for specified TCP ports
-  ufw:
+  community.general.ufw:
     rule: allow
     port: "{{ item }}"
     proto: tcp
@@ -28,7 +28,7 @@
   loop: "{{ allowed_inbound_tcp_ports | default([22, 80, 443]) }}"
 
 - name: Allow outbound traffic for specified TCP ports
-  ufw:
+  community.general.ufw:
     rule: allow
     port: "{{ item }}"
     proto: tcp
@@ -36,7 +36,7 @@
   loop: "{{ allowed_outbound_tcp_ports | default([80, 443]) }}"
 
 - name: Allow outbound traffic for specified UDP ports
-  ufw:
+  community.general.ufw:
     rule: allow
     port: "{{ item }}"
     proto: udp
@@ -44,7 +44,7 @@
   loop: "{{ allowed_outbound_udp_ports | default([53, 123]) }}"
 
 - name: Allow specified inbound UDP ports if defined
-  ufw:
+  community.general.ufw:
     rule: allow
     port: "{{ item }}"
     proto: udp

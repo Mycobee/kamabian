@@ -7,44 +7,44 @@ SSH_PRIVATE_KEY_PATH=$2
 WORKDIR=$(pwd)
 
 main() {
-  __precheck
-  __generate_inventory
-  __init
+	__precheck
+	__generate_inventory
+	__init
 }
 
 __precheck() {
-  __check_cmd python
-  __check_cmd ansible
-  # TODO: Verify $WORKDIR is the root of this repository
+	__check_cmd python
+	__check_cmd ansible
+	# TODO: Verify $WORKDIR is the root of this repository
 }
 
 __check_cmd() {
-  if ! command "$1" --version &> /dev/null; then
-      echo "$1 is not installed. Please install $1 first."
-      exit 1
-  fi
+	if ! command "$1" --version &>/dev/null; then
+		echo "$1 is not installed. Please install $1 first."
+		exit 1
+	fi
 
-  if [[ -z "$SSH_PRIVATE_KEY_PATH" ]]; then
-        echo "Error: SSH_PRIVATE_KEY_PATH environment variable is not set."
-        exit 1
-  fi
+	if [[ -z "$SSH_PRIVATE_KEY_PATH" ]]; then
+		echo "Error: SSH_PRIVATE_KEY_PATH environment variable is not set."
+		exit 1
+	fi
 
-  if [[ -z "$SERVER_IP" ]]; then
-      echo "Error: No server IP found in Terraform output"
-      exit 1
-  fi
+	if [[ -z "$SERVER_IP" ]]; then
+		echo "Error: No server IP found in Terraform output"
+		exit 1
+	fi
 }
 
 __generate_inventory() {
-  local inventory_file="${WORKDIR}/inventory.ini"
-  local template_file="${WORKDIR}/scripts/inventory_template.ini"
+	local inventory_file="${WORKDIR}/inventory.ini"
+	local template_file="${WORKDIR}/scripts/inventory_template.ini"
 
-  sed -e "s/{{ server_ip }}/$SERVER_IP/" -e "s|{{ ssh_key_path }}|$SSH_PRIVATE_KEY_PATH|" "$template_file" > "$inventory_file"
-  echo "Inventory file generated at $inventory_file"
+	sed -e "s/{{ server_ip }}/$SERVER_IP/" -e "s|{{ ssh_key_path }}|$SSH_PRIVATE_KEY_PATH|" "$template_file" >"$inventory_file"
+	echo "Inventory file generated at $inventory_file"
 }
 
 __init() {
-  ansible-playbook -i "${WORKDIR}/inventory.ini" "${WORKDIR}/ansible/playbooks/init.yml" -v -e ansible_user=root
+	ansible-playbook -i "${WORKDIR}/inventory.ini" "${WORKDIR}/ansible/playbooks/init.yml" -v -e ansible_user=root
 }
 
 main

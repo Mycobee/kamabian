@@ -1,9 +1,8 @@
 ---
 - name: Setup system security
-  import_tasks: security.yml
-
+  ansible.builtin.import_tasks: security.yml
 - name: Setup firewall
-  import_tasks: firewall.yml
+  ansible.builtin.import_tasks: firewall.yml
   when: skip_ufw_config is not defined or not skip_ufw_config
 
 - name: Debug apt packages
@@ -11,9 +10,9 @@
     var: apt_packages
 
 - name: Install apt packages
-  import_tasks: apt_packages.yml
+  ansible.builtin.import_tasks: apt_packages.yml
   when: apt_packages is defined and apt_packages | length > 0
 
 - name: Setup docker
-  import_tasks: docker.yml
+  ansible.builtin.import_tasks: docker.yml
   when: install_docker is defined and install_docker

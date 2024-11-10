@@ -1,10 +1,10 @@
 ---
 - name: Update apt packages
-  apt:
-    update_cache: yes
+  ansible.builtin.apt:
+    update_cache: true
 
 - name: Install defined apt packages
-  apt:
+  ansible.builtin.apt:
     name: "{{ item }}"
     state: present
   loop: "{{ apt_packages | default([]) }}"

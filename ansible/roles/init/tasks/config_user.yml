@@ -1,6 +1,6 @@
 ---
 - name: Create the config user
-  user:
+  ansible.builtin.user:
     name: config
     shell: /bin/bash
     groups: sudo
@@ -11,27 +11,27 @@
   ansible.builtin.lineinfile:
     path: /etc/sudoers
     state: present
-    regexp: '^config ALL=\(ALL\) NOPASSWD:ALL'
-    line: 'config ALL=(ALL) NOPASSWD:ALL'
-    validate: 'visudo -cf %s'
+    regexp: ^config ALL=\(ALL\) NOPASSWD:ALL
+    line: config ALL=(ALL) NOPASSWD:ALL
+    validate: visudo -cf %s
 
 - name: Create .ssh directory for config user
   become: true
-  file:
+  ansible.builtin.file:
     path: /home/config/.ssh
     state: directory
     owner: config
     group: config
-    mode: '0700'
+    mode: "0700"
 
 - name: Copy authorized SSH key to config user's home directory
-  copy:
+  ansible.builtin.copy:
     remote_src: true
     src: /root/.ssh/authorized_keys
     dest: /home/config/.ssh/authorized_keys
     owner: config
     group: config
-    mode: '0600'
+    mode: "0600"
 
 - name: Remove authorized_keys file from root's SSH configuration
   ansible.builtin.file:

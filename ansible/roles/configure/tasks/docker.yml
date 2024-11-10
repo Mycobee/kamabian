@@ -1,10 +1,10 @@
 ---
 - name: Update apt packages
-  apt:
-    update_cache: yes
+  ansible.builtin.apt:
+    update_cache: true
 
 - name: Install required system packages for docker deploy
-  apt:
+  ansible.builtin.apt:
     name: "{{ item }}"
     state: present
   with_items:
@@ -16,17 +16,17 @@
     - lsb-release
 
 - name: Add Docker GPG key
-  apt_key:
+  ansible.builtin.apt_key:
     url: https://download.docker.com/linux/debian/gpg
     state: present
 
 - name: Add Docker apt repository
-  apt_repository:
-    repo: "deb [arch=amd64] https://download.docker.com/linux/debian {{ ansible_distribution_release }} stable"
+  ansible.builtin.apt_repository:
+    repo: deb [arch=amd64] https://download.docker.com/linux/debian {{ ansible_distribution_release }} stable
     state: present
 
 - name: Install Docker
-  apt:
+  ansible.builtin.apt:
     name: "{{ item }}"
     state: present
   with_items:
@@ -35,33 +35,33 @@
     - containerd.io
 
 - name: Ensure Docker is started and enabled
-  systemd:
+  ansible.builtin.systemd:
     name: docker
-    enabled: yes
+    enabled: true
     state: started
 
 - name: Add config user to docker group
-  user:
+  ansible.builtin.user:
     name: config
     groups: docker
-    append: yes
+    append: true
 
 - name: Ensure Docker is started and enabled
-  systemd:
+  ansible.builtin.systemd:
     name: docker
-    enabled: yes
+    enabled: true
     state: started
 
 - name: Install Docker SDK for Python via apt
-  apt:
+  ansible.builtin.apt:
     name: python3-docker
     state: present
 
 - name: Restart Docker to apply changes
-  systemd:
+  ansible.builtin.systemd:
     name: docker
     state: restarted
-    enabled: yes
+    enabled: true
 
 # TODO: add robust config options such as custom data root, config.json, etc
 # TODO: add config option for docker compose install
