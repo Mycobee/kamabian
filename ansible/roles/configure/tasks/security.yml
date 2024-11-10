@@ -18,6 +18,9 @@
     path: /etc/apt/apt.conf.d/20auto-upgrades
     line: APT::Periodic::Unattended-Upgrade "1";
     create: true
+    owner: root
+    group: root
+    mode: "0644"
 
 - name: Install fail2ban
   ansible.builtin.apt:
@@ -102,6 +105,9 @@
   ansible.builtin.template:
     src: logrotate.conf.j2
     dest: /etc/logrotate.conf
+    owner: root
+    group: root
+    mode: "0644"
 
 - name: Configure log rotation for system logs
   ansible.builtin.copy:
@@ -115,6 +121,9 @@
           notifempty
           create 0640 root adm
       }
+    owner: root
+    group: root
+    mode: "0644"
 
 # TODO: Rework this file as a series of tasks, with environment variable overrides to install them
 # For example...if INSTALL_AIDE=false, then don't install it. Default to true. Set this in vars.yml file.
