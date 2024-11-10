@@ -1,0 +1,39 @@
+---
+- name: Create the config user
+  user:
+    name: config
+    shell: /bin/bash
+    groups: sudo
+    state: present
+
+- name: Allow config user to run sudo without a password
+  become: true
+  ansible.builtin.lineinfile:
+    path: /etc/sudoers
+    state: present
+    regexp: '^config ALL=\(ALL\) NOPASSWD:ALL'
+    line: 'config ALL=(ALL) NOPASSWD:ALL'
+    validate: 'visudo -cf %s'
+
+- name: Create .ssh directory for config user
+  become: true
+  file:
+    path: /home/config/.ssh
+    state: directory
+    owner: config
+    group: config
+    mode: '0700'
+
+- name: Copy authorized SSH key to config user's home directory
+  copy:
+    remote_src: true
+    src: /root/.ssh/authorized_keys
+    dest: /home/config/.ssh/authorized_keys
+    owner: config
+    group: config
+    mode: '0600'
+
+- name: Remove authorized_keys file from root's SSH configuration
+  ansible.builtin.file:
+    path: /root/.ssh/authorized_keys
+    state: absent
