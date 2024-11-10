@@ -1,6 +1,6 @@
 ---
 - name: Create user and set up SSH
-  import_tasks: config-user.yml
+  import_tasks: config_user.yml
 
 - name: Configure ansible SSH
-  import_tasks: config-ssh.yml
+  import_tasks: config_ssh.yml

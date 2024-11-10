@@ -1,0 +1,67 @@
+---
+- name: Update apt packages
+  apt:
+    update_cache: yes
+
+- name: Install required system packages for docker deploy
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - software-properties-common
+    - apt-transport-https
+    - ca-certificates
+    - curl
+    - gnupg
+    - lsb-release
+
+- name: Add Docker GPG key
+  apt_key:
+    url: https://download.docker.com/linux/debian/gpg
+    state: present
+
+- name: Add Docker apt repository
+  apt_repository:
+    repo: "deb [arch=amd64] https://download.docker.com/linux/debian {{ ansible_distribution_release }} stable"
+    state: present
+
+- name: Install Docker
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - docker-ce
+    - docker-ce-cli
+    - containerd.io
+
+- name: Ensure Docker is started and enabled
+  systemd:
+    name: docker
+    enabled: yes
+    state: started
+
+- name: Add config user to docker group
+  user:
+    name: config
+    groups: docker
+    append: yes
+
+- name: Ensure Docker is started and enabled
+  systemd:
+    name: docker
+    enabled: yes
+    state: started
+
+- name: Install Docker SDK for Python via apt
+  apt:
+    name: python3-docker
+    state: present
+
+- name: Restart Docker to apply changes
+  systemd:
+    name: docker
+    state: restarted
+    enabled: yes
+
+# TODO: add robust config options such as custom data root, config.json, etc
+# TODO: add config option for docker compose install

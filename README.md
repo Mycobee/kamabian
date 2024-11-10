@@ -5,27 +5,45 @@
 This repository handles the following.
 
 - Passwordless SSH
-- apt packages
-- Firewall (UFW) configuration (both UDP and TCP ports)
+- Apt packages of your choosing
+- Firewall (UFW) configuration (both UDP and TCP ports), with sane defaults and override possibility
 - Intrustion detection system (AIDE)
+- Logrotate
+- Docker (if desired)
 
 ### How it works
 
 Ansible works by connecting to a remote system, and configuring it. An easy way to use this script is by installing ansible on your local machine, and pointing it at a cloud VM with a strong password. Other clever, automated solutions are possible, such as using github actions runners and/or terraform to trigger this script.
 
+## Scripts
 
-### Scripts
+### init
 
-`./scripts/init` - Run this script after you create a VM with your public SSH key added to it for the root user.
-`./scripts/bootstrap` - Run this script after you have initialized a new VM. The plan is for this script to be idempotent and able to be run on existing VMs if needed
-
-## Usage
+Run this script after you create a VM with your public SSH key added to it for the root user.
 
 1. Install ansible on the system that will bootstrap the VM
 1. Create VM via the cloud provider of your choice, with a valid SSH key for the root user.
-1. Create a file `./.environment.yml` with your desired environment variables. This file is gitignored, and should NOT be committed to source code.
-1. Run the following command `./scripts/bootstrap <ip_address> <password>`
+1. Run the following command `./scripts/init <ip_address> <password>`
 
-## Warning
+### configure
 
-This repo is still in its early stages. It SHOULD NOT be used on your production systems without verification, scrutiny, and caution. Your servers are your responsibility. Please submit issues and feature requests in this repository.
+This script depends on the above `init` script being run successfully first. It will configure the VM, install desired `apt` packages, open desired firewall ports, etc.
+
+1. Add a `./vars.yml` file to the root of this repository. Use the `./vars.yml.example` file for reference
+2. Run `./scripts/configure`
+
+## Warning !!!
+
+This repo is still in its early stages. It SHOULD NOT be used on your production systems without verification, scrutiny, and caution. Your servers are **your** responsibility. Please submit issues and feature requests in this repository.
+
+### Contributing
+
+Open an issue before contributing, and have a brief discussion with the author about whether or not your feature is in alignment with the author's wishes. If it does, then go ahead and open a PR.
+
+#### Future features
+
+- Adding multiple servers to the init process
+- Database connection options
+- Email configuration for logwatch
+- Docker compose setup
+- User mgmt and access controls
