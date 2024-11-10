@@ -1,0 +1,29 @@
+# Add these to your vars.yml
+
+# Desired apt packages
+apt_packages:
+  - tree
+  - curl
+  - gnupg
+
+# set your firewall rules using the below vars
+allowed_inbound_tcp_ports:
+  - 22
+  - 80
+  - 443
+allowed_outbound_tcp_ports:
+  - 80    # HTTP
+  - 443   # HTTPS
+  - 587   # SMTP (submission)
+  - 465   # SMTP over SSL
+allowed_outbound_udp_ports:
+  - 53    # DNS
+  - 123   # NTP
+allowed_inbound_udp_ports:
+  - 443   # QUIC
+
+# To skip ALL ufw config (which renders above vars useless), set this var to true
+skip_ufw_config: false 
+
+# this var can be used to install docker
+install_docker: true

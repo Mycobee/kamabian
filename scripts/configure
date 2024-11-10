@@ -1,0 +1,10 @@
+#!/bin/bash
+
+WORKDIR=$(pwd)
+VARS_FILE="${WORKDIR}/vars.yml"
+
+main() {
+  ansible-playbook -i inventory.ini ansible/playbooks/configure.yml
+}
+
+main

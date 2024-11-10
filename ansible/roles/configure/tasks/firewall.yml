@@ -1,0 +1,53 @@
+---
+- name: Install UFW
+  apt:
+    name: ufw
+    state: present
+    update_cache: true
+
+- name: Set default policy for incoming traffic
+  ufw:
+    default: deny
+    direction: incoming
+    state: enabled
+    logging: on
+
+- name: Set default policy for outgoing traffic
+  ufw:
+    default: deny
+    direction: outgoing
+    state: enabled
+    logging: on
+
+- name: Allow inbound traffic for specified TCP ports
+  ufw:
+    rule: allow
+    port: "{{ item }}"
+    proto: tcp
+    direction: in
+  loop: "{{ allowed_inbound_tcp_ports | default([22, 80, 443]) }}"
+
+- name: Allow outbound traffic for specified TCP ports
+  ufw:
+    rule: allow
+    port: "{{ item }}"
+    proto: tcp
+    direction: out
+  loop: "{{ allowed_outbound_tcp_ports | default([80, 443]) }}"
+
+- name: Allow outbound traffic for specified UDP ports
+  ufw:
+    rule: allow
+    port: "{{ item }}"
+    proto: udp
+    direction: out
+  loop: "{{ allowed_outbound_udp_ports | default([53, 123]) }}"
+
+- name: Allow specified inbound UDP ports if defined
+  ufw:
+    rule: allow
+    port: "{{ item }}"
+    proto: udp
+    direction: in
+  loop: "{{ allowed_inbound_udp_ports | default([]) }}"
+  when: allowed_inbound_udp_ports is defined and allowed_inbound_udp_ports | length > 0

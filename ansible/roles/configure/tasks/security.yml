@@ -1,0 +1,121 @@
+---
+- name: Install unattended-upgrades
+  apt:
+    name: unattended-upgrades
+    state: present
+    update_cache: true
+
+- name: Configure unattended-upgrades
+  copy:
+    src: ./templates/unattended-upgrades.j2
+    dest: /etc/apt/apt.conf.d/50unattended-upgrades
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Enable automatic upgrades
+  lineinfile:
+    path: /etc/apt/apt.conf.d/20auto-upgrades
+    line: 'APT::Periodic::Unattended-Upgrade "1";'
+    create: yes
+
+- name: Install fail2ban
+  apt:
+    name: fail2ban
+    state: present
+    update_cache: true
+
+- name: Configure fail2ban
+  template:
+    src: ./templates/jail.local.j2
+    dest: /etc/fail2ban/jail.local
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Ensure fail2ban is running and enabled
+  service:
+    name: fail2ban
+    state: started
+    enabled: yes
+
+- name: Install AIDE
+  apt:
+    name: aide
+    state: present
+    update_cache: true
+
+- name: Check if AIDE database is initialized
+  stat:
+    path: /var/lib/aide/aide.db
+  register: aide_db
+
+- name: Initialize AIDE database
+  command: aideinit
+  args:
+    creates: /var/lib/aide/aide.db
+  when: not aide_db.stat.exists
+
+- name: Schedule AIDE check to run daily
+  cron:
+    name: "Daily AIDE Check"
+    minute: "0"
+    hour: "2"
+    job: "/usr/bin/aide --check"
+  when: not aide_db.stat.exists
+
+- name: Ensure systemd-timesyncd is installed
+  apt:
+    name: systemd-timesyncd
+    state: present
+    update_cache: yes
+
+- name: Enable and start systemd-timesyncd
+  systemd:
+    name: systemd-timesyncd
+    state: started
+    enabled: yes
+
+- name: Check NTP status
+  command: timedatectl status
+  register: ntp_status
+  changed_when: false
+
+- name: Install auditd
+  apt:
+    name: auditd
+    state: present
+    update_cache: true
+
+- name: Ensure auditd is running and enabled
+  service:
+    name: auditd
+    state: started
+    enabled: yes
+
+- name: Install logrotate
+  ansible.builtin.package:
+    name: logrotate
+    state: present
+
+- name: Configure logrotate with defaults
+  ansible.builtin.template:
+    src: logrotate.conf.j2
+    dest: /etc/logrotate.conf
+
+- name: Configure log rotation for system logs
+  ansible.builtin.copy:
+    dest: /etc/logrotate.d/syslog
+    content: |
+      /var/log/syslog {
+          weekly
+          rotate 4
+          compress
+          missingok
+          notifempty
+          create 0640 root adm
+      }
+
+# TODO: Rework this file as a series of tasks, with environment variable overrides to install them
+# For example...if INSTALL_AIDE=false, then don't install it. Default to true. Set this in vars.yml file.
+# Seperate logging in to its own file, and configure logwatch and SMTP if desired

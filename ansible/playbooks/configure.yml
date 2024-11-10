@@ -1,0 +1,8 @@
+---
+- name: Configure base packages and operating system
+  hosts: servers
+  become: true
+  roles:
+    - configure
+  vars_files:
+    - ../../vars.yml
