@@ -9,10 +9,14 @@ This repository handles the following.
 - Firewall (UFW) configuration (both UDP and TCP ports)
 - Intrustion detection system (AIDE)
 
-
 ### How it works
 
 Ansible works by connecting to a remote system, and configuring it. An easy way to use this script is by installing ansible on your local machine, and pointing it at a cloud VM with a strong password. Other clever, automated solutions are possible, such as using github actions runners and/or terraform to trigger this script.
+
+
+### Scripts
+
+`./scripts/init` - Run this script after you create a VM with your public SSH key added to it for the root user.
 
 ## Usage
 
