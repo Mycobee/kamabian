@@ -47,3 +47,5 @@ Open an issue before contributing, and have a brief discussion with the author a
 - Email configuration for logwatch
 - Docker compose setup
 - User mgmt and access controls
+- Package this as a role for ansible galaxy
+- Setup to for easy plug-n-play with Rails deploy tool, Kamal
