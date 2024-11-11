@@ -27,7 +27,7 @@ Run this script after you create a VM with your public SSH key added to it for t
 
 1. Install ansible on the system that will bootstrap the VM
 1. Create VM via the cloud provider of your choice, with a valid SSH key for the root user.
-1. Run the following command `./scripts/init <ip_address> <password>`
+1. Run the following command `./scripts/init <ip_address> <path_to_ssh_priv_key>`
 
 ### configure
 
