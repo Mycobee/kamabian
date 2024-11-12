@@ -1,13 +1,10 @@
 ---
 - name: Setup system security
   ansible.builtin.import_tasks: security.yml
+
 - name: Setup firewall
   ansible.builtin.import_tasks: firewall.yml
   when: skip_ufw_config is not defined or not skip_ufw_config
-
-- name: Debug apt packages
-  ansible.builtin.debug:
-    var: apt_packages
 
 - name: Install apt packages
   ansible.builtin.import_tasks: apt_packages.yml
