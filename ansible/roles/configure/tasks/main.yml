@@ -8,8 +8,7 @@
 
 - name: Install apt packages
   ansible.builtin.import_tasks: apt_packages.yml
-  when: apt_packages is defined and apt_packages | length > 0
 
 - name: Setup docker
   ansible.builtin.import_tasks: docker.yml
-  when: install_docker is defined and install_docker
+  when: (install_docker is defined and install_docker) or (install_docker is not defined)

@@ -4,5 +4,3 @@
   become: true
   roles:
     - configure
-  vars_files:
-    - ../../vars.yml
