@@ -19,7 +19,7 @@
     line: "deb [arch={{ arch_output.stdout }} signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/{{ ansible_distribution | lower }} {{ codename_output.stdout }} stable"
     create: true
 
-- name: Update apt packages to include docker
+- name: Update apt packages to include Docker
   ansible.builtin.apt:
     update_cache: true
 

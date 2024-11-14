@@ -13,7 +13,7 @@
   ansible.builtin.apt:
     name: "{{ item }}"
     state: present
-  when: install_docker is defined and install_docker
+  when: (install_docker is defined and install_docker) or (install_docker is not defined)
   with_items:
     - software-properties-common
     - apt-transport-https
