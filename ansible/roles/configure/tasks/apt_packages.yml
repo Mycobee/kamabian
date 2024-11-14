@@ -8,3 +8,16 @@
     name: "{{ item }}"
     state: present
   loop: "{{ apt_packages | default([]) }}"
+
+- name: Install required system packages for docker
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: present
+  when: install_docker is defined and install_docker
+  with_items:
+    - software-properties-common
+    - apt-transport-https
+    - ca-certificates
+    - curl
+    - gnupg
+    - lsb-release

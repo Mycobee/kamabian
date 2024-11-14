@@ -42,31 +42,6 @@
     state: started
     enabled: true
 
-- name: Install AIDE
-  ansible.builtin.apt:
-    name: aide
-    state: present
-    update_cache: true
-
-- name: Check if AIDE database is initialized
-  ansible.builtin.stat:
-    path: /var/lib/aide/aide.db
-  register: aide_db
-
-- name: Initialize AIDE database
-  ansible.builtin.command: aideinit
-  args:
-    creates: /var/lib/aide/aide.db
-  when: not aide_db.stat.exists
-
-- name: Schedule AIDE check to run daily
-  ansible.builtin.cron:
-    name: Daily AIDE Check
-    minute: "0"
-    hour: "2"
-    job: /usr/bin/aide --check
-  when: not aide_db.stat.exists
-
 - name: Ensure systemd-timesyncd is installed
   ansible.builtin.apt:
     name: systemd-timesyncd
@@ -126,5 +101,4 @@
     mode: "0644"
 
 # TODO: Rework this file as a series of tasks, with environment variable overrides to install them
-# For example...if INSTALL_AIDE=false, then don't install it. Default to true. Set this in vars.yml file.
-# Seperate logging in to its own file, and configure logwatch and SMTP if desired
+# TODO: Seperate logging in to its own file, and configure logwatch and SMTP if desired

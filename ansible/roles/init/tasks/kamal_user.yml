@@ -1,36 +1,36 @@
 ---
-- name: Create the config user
+- name: Create the kamal user
   ansible.builtin.user:
-    name: config
+    name: kamal
     shell: /bin/bash
     groups: sudo
     state: present
 
-- name: Allow config user to run sudo without a password
+- name: Allow kamal user to run sudo without a password
   become: true
   ansible.builtin.lineinfile:
     path: /etc/sudoers
     state: present
-    regexp: ^config ALL=\(ALL\) NOPASSWD:ALL
-    line: config ALL=(ALL) NOPASSWD:ALL
+    regexp: ^kamal ALL=\(ALL\) NOPASSWD:ALL
+    line: kamal ALL=(ALL) NOPASSWD:ALL
     validate: visudo -cf %s
 
-- name: Create .ssh directory for config user
+- name: Create .ssh directory for kamal user
   become: true
   ansible.builtin.file:
-    path: /home/config/.ssh
+    path: /home/kamal/.ssh
     state: directory
-    owner: config
-    group: config
+    owner: kamal
+    group: kamal
     mode: "0700"
 
-- name: Copy authorized SSH key to config user's home directory
+- name: Copy authorized SSH key to kamal user's home directory
   ansible.builtin.copy:
     remote_src: true
     src: /root/.ssh/authorized_keys
-    dest: /home/config/.ssh/authorized_keys
-    owner: config
-    group: config
+    dest: /home/kamal/.ssh/authorized_keys
+    owner: kamal
+    group: kamal
     mode: "0600"
 
 - name: Remove authorized_keys file from root's SSH configuration

@@ -1,0 +1,15 @@
+#!/bin/bash
+
+SERVER_IP=$1
+if [ -f /.dockerenv ]; then
+  SSH_PRIVATE_KEY_PATH=/root/.ssh/privkey
+else
+  SSH_PRIVATE_KEY_PATH=$2
+fi
+
+main() {
+  ./scripts/init $SERVER_IP $SSH_PRIVATE_KEY_PATH
+  ./scripts/configure
+}
+
+main

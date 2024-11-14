@@ -26,4 +26,9 @@ allowed_inbound_udp_ports:
 skip_ufw_config: false 
 
 # this var can be used to install docker
-install_docker: true
+# note, this currently does not work on ubuntu, and kamal can instead be used
+install_docker: false
+
+# Tested with the following interpreter. This variable is required
+ansible_python_interpreter: /usr/bin/python3
+

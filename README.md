@@ -7,7 +7,6 @@ This repository handles the following.
 - Passwordless SSH
 - Apt packages of your choosing
 - Firewall (UFW) configuration (both UDP and TCP ports), with sane defaults and override possibility
-- Intrustion detection system (AIDE)
 - Logrotate
 - Docker (if desired)
 
