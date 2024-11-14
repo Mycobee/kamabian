@@ -25,10 +25,7 @@ allowed_inbound_udp_ports:
 # To skip ALL ufw config (which renders above vars useless), set this var to true
 skip_ufw_config: false 
 
-# this var can be used to install docker
-# note, this currently does not work on ubuntu, and kamal can instead be used
+# this var can be used to skip docker install. You will need to manually add the deploy user of your choice to the docker group if you do this
 install_docker: false
 
-# Tested with the following interpreter. This variable is required
 ansible_python_interpreter: /usr/bin/python3
-
