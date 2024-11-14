@@ -1,6 +1,6 @@
-# About
+# Kamabian
 
-`debian-base` is an ansible repository designed to deploy a base debian VM image with secure and sane defaults. Often times, spinning up a new VM from scratch can be a laborious task with many considerations.
+`Kamabian` is a repository designed to configure a Debian (or Ubuntu) server with secure and sane defaults. It is designed to work alongside the open source tool [Kamal](https://kamal-deploy.org), for deploying containerized applications on your own server or VM.
 
 This repository handles the following.
 
@@ -8,47 +8,44 @@ This repository handles the following.
 - Apt packages of your choosing
 - Firewall (UFW) configuration (both UDP and TCP ports), with sane defaults and override possibility
 - Logrotate
-- Docker (if desired)
+- Docker
 
-### How it works
+It creates a user named `kamal` for deploying your applications on your server.
 
-Ansible works by connecting to a remote system, and configuring it. An easy way to use this script is by installing ansible on your local machine, and pointing it at a cloud VM with a strong password. Other clever, automated solutions are possible, such as using github actions runners and/or terraform to trigger this script.
+## Setup
 
-## Depedencies
+You must have the following things in place for this repository to work
 
-You must have bash, python3 and ansible core installed on your system. This repo is tested with GNU bash version 5.2.32, Python 3.11.5 and Ansible core 2.17.4. This may work with older versions, but it is neither tested nor verified.
+1. A server with an IP address
+2. Root access to the server via SSH (easily attained with most cloud providers)
+3. Docker on your host system
 
-## Scripts
+## Usage
 
-### init
+```bash
+$ docker pull kamabian/kamabian:latest
+$ docker run -v <path_to_your_priv_ssh_key>:/root/.ssh/privkey:ro -it kamabian/kamabian:latest /kamabian/scripts/bootstrap <your_server_ip>
+```
 
-Run this script after you create a VM with your public SSH key added to it for the root user.
+That's it! Just replace the path to your SSH key, and let `Kamabian` handle the rest.
 
-1. Install ansible on the system that will bootstrap the VM
-1. Create VM via the cloud provider of your choice, with a valid SSH key for the root user.
-1. Run the following command `./scripts/init <ip_address> <path_to_ssh_priv_key>`
+### Using with Kamal
 
-### configure
+To use this with Kamal, the only setting needed is
 
-This script depends on the above `init` script being run successfully first. It will configure the VM, install desired `apt` packages, open desired firewall ports, etc.
+```yaml
+ssh:
+  user: kamal
+```
 
-1. Add a `./vars.yml` file to the root of this repository. Use the `./vars.yml.example` file for reference
-2. Run `./scripts/configure`
+#### Overrides
+
+To override settings, create a `./vars.yml` file based on `vars.yml.example`, and mount it with the docker flag `-v ./vars.yml:/kamabian`. This will allow you to set things like desired apt packages, firewall configs, and more.
 
 ## Warning !!!
 
-This repo is still in its early stages. It SHOULD NOT be used on your production systems without verification, scrutiny, and caution. Your servers are **your** responsibility. Please submit issues and feature requests in this repository.
+This project is still in its early stages. If you plan to use this on your production systems, use scrutiny and caution. Your servers are **your** responsibility. Please submit issues and feature requests in this repository.
 
-### Contributing
+## Contributing
 
-Open an issue before contributing, and have a brief discussion with the author about whether or not your feature is in alignment with the author's wishes. If it does, then go ahead and open a PR.
-
-#### Future features
-
-- Adding multiple servers to the init process
-- Database administration options (postgres, mysql, sqlite)
-- Email configuration for logwatch
-- Docker compose setup
-- User mgmt and access controls
-- Package this as a role for ansible galaxy
-- Setup to for easy plug-n-play with Rails deploy tool, Kamal
+Open an issue before contributing and have a brief discussion with the author about whether or not your feature is in alignment with the author's wishes. If it does, then go ahead and open a PR.
