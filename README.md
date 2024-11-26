@@ -1,5 +1,7 @@
 # Kamabian
 
+**Configure Ubuntu and Debian Systems for Kamal**
+
 `Kamabian` is a repository designed to configure a Debian (or Ubuntu) server with secure and sane defaults. It is designed to work alongside the open source tool [Kamal](https://kamal-deploy.org), for deploying containerized applications on your own server or VM.
 
 This repository handles the following.
