@@ -6,13 +6,18 @@
     groups: sudo
     state: present
 
-- name: Allow kamal user to run sudo without a password
-  become: true
+- name: Set password for kamal user from environment variable
+  ansible.builtin.user:
+    name: kamal
+    password: "{{ lookup('env', 'KAMAL_USER_PASSWORD') | password_hash('sha512') }}"
+  no_log: true
+
+- name: Ensure kamal user uses a password for sudo
   ansible.builtin.lineinfile:
     path: /etc/sudoers
     state: present
-    regexp: ^kamal ALL=\(ALL\) NOPASSWD:ALL
-    line: kamal ALL=(ALL) NOPASSWD:ALL
+    regexp: ^kamal ALL=\(ALL\).*
+    line: kamal ALL=(ALL) ALL
     validate: visudo -cf %s
 
 - name: Create .ssh directory for kamal user

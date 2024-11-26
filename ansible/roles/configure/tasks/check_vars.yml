@@ -1,0 +1,13 @@
+- name: Check if ../../vars.yml exists
+  ansible.builtin.stat:
+    path: ../../vars.yml
+  register: vars_file_stat
+
+- name: Include vars file if it exists
+  ansible.builtin.include_vars:
+    file: ../../vars.yml
+  when: vars_file_stat.stat.exists
+
+- name: Proceed with the rest of the playbook
+  debug:
+    msg: "vars.yml was {{ 'loaded' if vars_file_stat.stat.exists else 'not loaded' }}"
