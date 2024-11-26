@@ -24,7 +24,10 @@ You must have the following things in place for this repository to work
 
 ```bash
 $ docker pull kamabian/kamabian:latest
-$ docker run -v <path_to_your_priv_ssh_key>:/root/.ssh/privkey:ro -e KAMAL_USER_PASSWORD=<secure_password_of_your_choosing> -it kamabian/kamabian:latest /kamabian/scripts/bootstrap <your_server_ip>
+$ docker run -v <path_to_your_priv_ssh_key>:/root/.ssh/privkey:ro \
+    -e KAMAL_USER_PASSWORD=<secure_password_of_your_choosing> \
+    -it kamabian/kamabian:latest \
+    /kamabian/scripts/bootstrap <your_server_ip>
 ```
 
 That's it! Just replace the path to your SSH key, pick a secure password for your `kamal` user (don't lose it), and let `Kamabian` handle the rest.
@@ -50,7 +53,7 @@ ssh:
 
 To override settings, create a `./vars.yml` file based on `vars.yml.example`, and mount it with the docker flag `-v ./vars.yml:/kamabian`. This will allow you to set things like desired apt packages, firewall configs, and more.
 
-## Warning !!!
+## Disclaimer
 
 This project is still in its early stages. If you plan to use this on your production systems, use scrutiny and caution. Your servers are **your** responsibility. Please submit issues and feature requests in this repository.
 
