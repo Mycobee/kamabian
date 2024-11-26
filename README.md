@@ -8,7 +8,7 @@ This repository handles the following.
 
 - Passwordless SSH
 - Fail2ban
-- Firewall (UFW) configuration (both UDP and TCP ports), with sane defaults and override possibility
+- Firewall (UFW) configuration (both UDP and TCP ports), with reasonable defaults and override possibility
 - Logrotate
 - Docker
 
