@@ -15,7 +15,6 @@ main() {
 __precheck() {
 	__check_cmd python
 	__check_cmd ansible
-	# TODO: Verify $WORKDIR is the root of this repository
 }
 
 __check_cmd() {
