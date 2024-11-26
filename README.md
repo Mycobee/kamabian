@@ -29,6 +29,14 @@ $ docker run -v <path_to_your_priv_ssh_key>:/root/.ssh/privkey:ro -it kamabian/k
 
 That's it! Just replace the path to your SSH key, and let `Kamabian` handle the rest.
 
+#### Where is my SSH Key?!
+
+The point of this repo is to minimize the amount of DevOps you need to do, so if you don't know how to find the `<path_to_your_priv_ssh_key>` value, try this:
+
+```
+echo "$HOME/.ssh/$(ls ~/.ssh | grep -E '^id_(rsa|ed25519)$')"
+```
+
 ### Using with Kamal
 
 To use this with Kamal, the only setting needed is
